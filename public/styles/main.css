@@ -31,6 +31,18 @@ h1 {
   background-color: #a683e3;
   text-align: center;
 }
+
+select {
+  width: 200px;
+  height: 20px;
+  background-color: #a683e3;
+  color: white
+}
+
+select:hover{
+  cursor: pointer;
+}
+
 form.edit {
   display: flex;
 }
@@ -53,6 +65,7 @@ input[type="checkbox"] {
 
 p {
   margin: 0;
+  margin-right: 20px;
   padding: 20px 0;
   font-size: 20px;
   color: #00204a;
@@ -65,13 +78,14 @@ form {
 
 button.add {
   min-height: 50px;
-  width: 50px;
+  min-width: 50px;
   border-radius: 50%;
   border-color: transparent;
   background-color: #a683e3;
   color: #fff;
   font-size: 30px;
   border-width: 0;
+  margin-right: 20px
 }
 
 button.edit {
@@ -94,6 +108,7 @@ input[type="text"] {
   font-size: 20px;
   font-weight: 200;
   width: 80%;
+  margin-right: 20px
 }
 
 input[type="text"]:focus {

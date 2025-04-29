@@ -5,6 +5,17 @@
       <%= listTitle %>
     </h1>
   </div>
+
+  <form action="/timeSlot" method="post">
+      <select id="time-slot" name="timeSlot" onchange="this.form.submit()">
+        <option selected disabled>Select time period</option>
+        <option value="today" <%= selectedPeriod === 'today' ? 'selected' : ''%>>today</option>
+        <option value="current week" <%= selectedPeriod === 'current week' ? 'selected' : ''%>>current week</option>
+        <option value="current month" <%= selectedPeriod === 'current month' ? 'selected' : ''%>>current month</option>
+      </select>
+    </label>
+  </form>
+
   <div class="box">
     <% for(let item of listItems){%>
       <div class="item">
@@ -14,7 +25,11 @@
 
         <p id="title<%=item.id%>">
           <%= item.title %>
+        </p> 
+        <p>
+          <%= item.date %>
         </p>
+    
 
         <form class="edit" action="/edit" method="post">
           <input type="hidden" name="updatedItemId" value="<%= item.id %>">
@@ -28,13 +43,20 @@
       </div>
       <% } %>
 
-        <form class="item" action="/add" method="post">
-          <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
-          <button class="add" type="submit" name="list" value=<%=listTitle %> >+</button>
-        </form>
+      <form class="item" action="/add" method="post">
+        <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
+        <input type="text" name="date" class="datepicker form-control" placeholder="<%=currentDate %>" autocomplete="off" autofocus="true">
+        <button class="add" type="submit" name="list" value=<%=listTitle %> >+</button>
+      </form>
   </div>
 
   <script>
+    $(function() {
+      $(".datepicker").datepicker({
+        dateFormat: "yy-mm-dd"
+      });
+    })
+
     function handler(id) {
       document.getElementById("title" + id).setAttribute("hidden", true)
       document.getElementById("edit" + id).setAttribute("hidden", true)
