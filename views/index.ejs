@@ -6,62 +6,94 @@
     </h1>
   </div>
 
-  <form action="/timeSlot" method="post">
-      <select id="time-slot" name="timeSlot" onchange="this.form.submit()">
-        <option selected disabled>Select time period</option>
-        <option value="today" <%= selectedPeriod === 'today' ? 'selected' : ''%>>today</option>
-        <option value="current week" <%= selectedPeriod === 'current week' ? 'selected' : ''%>>current week</option>
-        <option value="current month" <%= selectedPeriod === 'current month' ? 'selected' : ''%>>current month</option>
-      </select>
-    </label>
-  </form>
 
-  <div class="box">
-    <% for(let item of listItems){%>
-      <div class="item">
-        <form action="/delete" method="post">
-          <input type="checkbox" onchange="this.form.submit()" name="deleteItemId" value="<%= item.id %>">
-        </form>
+  <% users.forEach(function(user) { %>
+    <form action="/user/<%= user.name %>/<%= user.id %>" method="get" style="display: inline;">
+      <button type="submit"
+        style="background-color: <%= user.name === userName ? 'black' : '#654898'%>; color: white; padding: 10px 20px; margin: 5px; border: none; border-radius: 5px;">
+        <%= user.name %>
+      </button>
+    </form>
+    <% }) %>
 
-        <p id="title<%=item.id%>">
-          <%= item.title %>
-        </p> 
-        <p>
-          <%= item.date %>
-        </p>
-    
-
-        <form class="edit" action="/edit" method="post">
-          <input type="hidden" name="updatedItemId" value="<%= item.id %>">
-          <input id="input<%=item.id%>" type="text" name="updatedItemTitle" value="<%= item.title %>" autocomplete="off"
-            autofocus="true" hidden="true" />
-          <button id="done<%=item.id%>" class="edit" type="submit" hidden><img class="icon"
-              src="/assets/icons/check-solid.svg" alt="tick image"></button>
-        </form>
-        <button id="edit<%=item.id%>" class="edit" onclick="handler('<%=item.id%>')"><img class="icon"
-            src="/assets/icons/pencil-solid.svg" alt="pencil image"></button>
-      </div>
-      <% } %>
-
-      <form class="item" action="/add" method="post">
-        <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
-        <input type="text" name="date" class="datepicker form-control" placeholder="<%=currentDate %>" autocomplete="off" autofocus="true">
-        <button class="add" type="submit" name="list" value=<%=listTitle %> >+</button>
+      <form action="/addUser" method="post">
+        <button type="submit" name="add" value="new"
+          style="background-color: #56535d; color: white; padding: 10px 20px; margin: 5px; border: none; border-radius: 5px;">Add
+          Family Member</button>
       </form>
-  </div>
 
-  <script>
-    $(function() {
-      $(".datepicker").datepicker({
-        dateFormat: "yy-mm-dd"
-      });
-    })
+      <form action="/timeSlot" method="post">
+        <input type="hidden" name="userId" value="<%= currentUserId %>">
+        <input type="hidden" name="userName" value="<%= userName %>">
+        <select id="time-slot" name="timeSlot" onchange="this.form.submit()">
+          <option selected disabled>Select time period</option>
+          <option value="today" <%=selectedPeriod==='today' ? 'selected' : '' %>>today</option>
+          <option value="current week" <%=selectedPeriod==='current week' ? 'selected' : '' %>>current week</option>
+          <option value="current month" <%=selectedPeriod==='current month' ? 'selected' : '' %>>current month</option>
+        </select>
+        </label>
+      </form>
 
-    function handler(id) {
-      document.getElementById("title" + id).setAttribute("hidden", true)
-      document.getElementById("edit" + id).setAttribute("hidden", true)
-      document.getElementById("done" + id).removeAttribute("hidden")
-      document.getElementById("input" + id).removeAttribute("hidden")
-    }
-  </script>
-  <%- include('partials/footer.ejs'); -%>
+      <div class="box">
+        <% for (let item of listItems) { %>
+          <div class="item">
+            <% const uid=item.item_id ?? item.id; %>
+              <!-- DELETE -->
+              <form action="/delete" method="post">
+                <input type="hidden" name="userId" value="<%= currentUserId %>">
+                <input type="checkbox" name="deleteItemId" value="<%= uid %>" onchange="this.form.submit()">
+              </form>
+
+              <!-- TITLE -->
+              <p id="title<%= uid %>">
+                <%= item.title %>
+              </p>
+              <% if (item.user_name) { %>
+                <p>
+                  <%= item.user_name %>
+                </p>
+                <% } %>
+                  <p>
+                    <%= item.date %>
+                  </p>
+
+                  <!-- EDIT FORM -->
+                  <form class="edit" action="/edit" method="post">
+                    <input type="hidden" name="updatedItemId" value="<%= uid %>">
+                    <input type="hidden" name="userId" value="<%= currentUserId %>">
+                    <input id="input<%= uid %>" type="text" name="updatedItemTitle" value="<%= item.title %>" hidden>
+                    <button id="done<%= uid %>" class="edit" type="submit" hidden>
+                      <img class="icon" src="/assets/icons/check-solid.svg" alt="tick">
+                    </button>
+                  </form>
+
+                  <!-- EDIT BUTTON -->
+                  <button id="edit<%= uid %>" class="edit" onclick="handler('<%= uid %>')">
+                    <img class="icon" src="/assets/icons/pencil-solid.svg" alt="pencil">
+                  </button>
+          </div>
+          <% } %>
+
+            <form class="item" action="/add" method="post">
+              <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
+              <input type="text" name="date" class="datepicker form-control" placeholder="<%=currentDate %>"
+                autocomplete="off" autofocus="true">
+              <input type="hidden" name="userId" value="<%= currentUserId %>">
+              <button class="add" type="submit" name="list" value=<%=listTitle %> >+</button>
+            </form>
+      </div>
+      <script>
+        $(function () {
+          $(".datepicker").datepicker({
+            dateFormat: "yy-mm-dd"
+          });
+        })
+
+        function handler(id) {
+          document.getElementById("title" + id).setAttribute("hidden", true)
+          document.getElementById("edit" + id).setAttribute("hidden", true)
+          document.getElementById("done" + id).removeAttribute("hidden")
+          document.getElementById("input" + id).removeAttribute("hidden")
+        }
+      </script>
+      <%- include('partials/footer.ejs'); -%>

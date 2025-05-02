@@ -1,0 +1,15 @@
+<%- include('partials/headerNew.ejs'); -%>
+<div class="box" id="heading">
+  <h1>
+    Add Family Member
+  </h1>
+</div>
+<form action="/new" method="post">
+  <p>Enter your name</p>
+  <div class="form-row">
+    <input type="text" name="name" placeholder="<%= locals.error ? error :  '' %>" style="<%= error ? 'border: 2px solid red;' : '' %>">
+    
+    <button type="submit" name="add" value="new" style="background-color: #56535d; color: white; padding: 0 20px; border: none; border-radius: 5px; height: 60px;">Add</button>
+  </div>
+</form>
+  <%- include('partials/footer.ejs'); -%>

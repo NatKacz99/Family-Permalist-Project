@@ -9,11 +9,21 @@ body {
   flex-direction: column;
   justify-content: stretch;
   min-height: 95vh;
+  box-sizing: border-box;
 }
 main {
   text-align: center;
   flex: 1 0 auto;
 }
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+
 h1 {
   color: #fff;
   padding: 10px;
@@ -30,18 +40,6 @@ h1 {
 #heading {
   background-color: #a683e3;
   text-align: center;
-}
-
-select {
-  width: 200px;
-  height: 20px;
-  background-color: #a683e3;
-  color: white;
-  margin-top: 20px
-}
-
-select:hover{
-  cursor: pointer;
 }
 
 form.edit {
@@ -81,25 +79,6 @@ form {
   margin-left: 20px;
 }
 
-button.add {
-  min-height: 50px;
-  min-width: 50px;
-  border-radius: 50%;
-  border-color: transparent;
-  background-color: #a683e3;
-  color: #fff;
-  font-size: 30px;
-  border-width: 0;
-  margin-right: 20px
-}
-
-button.edit {
-  margin-left: 0px;
-  margin-right: 20px;
-  border: none;
-  background: none;
-}
-
 .icon {
   height: 20px;
 }
@@ -109,11 +88,12 @@ input[type="text"] {
   height: 60px;
   top: 10px;
   border: none;
-  background: transparent;
+  border-radius: 5px;
+  background-color: white;
   font-size: 20px;
   font-weight: 200;
-  width: 80%;
-  margin-right: 20px
+  width: 50%;
+  margin: 0
 }
 
 input[type="text"]:focus {
